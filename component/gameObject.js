@@ -6,7 +6,6 @@ import { View } from 'react-native-web';
 export const ReactObject = ({ x, y }) => {
     const position = useRef(new Animated.ValueXY({ x: x, y: y })).current;
 
-
     const reactStyle = {
         height: `${20}px`,
         width: `${20}px`,
@@ -21,9 +20,6 @@ export const ReactObject = ({ x, y }) => {
         }).start();
         console.log(position.y);
     }, [])
-
-    const startFalling = () => {
-    }
 
     return (
         <Animated.Image source={icon} style={[reactStyle, position.getLayout()]} />

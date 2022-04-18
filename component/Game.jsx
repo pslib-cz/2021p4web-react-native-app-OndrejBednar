@@ -27,31 +27,39 @@ export const GameScreen = ({ navigation, route }) => {
   const { x, y, z } = accelerometerData;
 
 
-  const spawnReactObject = useCallback(() => {
-    setReacts((oldReacts) => [...oldReacts, CreateReactObject()]);
-  }, [setReacts]);
 
+const startSpawning = () => {
+  setReacts((oldReacts) => [...oldReacts, CreateReactObject()]);
+}
+
+  //method for handling catching game objects
   const onReactCatch = (index) => {
     setScore(score++);
     setReacts(removeDot(reacts, index));
   };
 
+
+  //method for creating new game objects
   const CreateReactObject = () => {
-    let x = Math.floor(Math.random() * windowWidth - 20) + 10; //10px margin
-    return <ReactObject x={x} y="0" />
+    let x = Math.floor(Math.random() * fieldRef.current.offsetWidth);
+    return <ReactObject x={x} y={0} />
   }
 
+  //method for removing objects when we dont need them
   const RemoveReactObject = (reacts, index) => {
     const newReacts = [...reacts]
     newReacts.splice(index, 1);
     return newReacts
   }
 
+  //game starting button method
   const startGame = () => {
     console.log(fieldRef.current.offsetHeight);
+    console.log(fieldRef.current.offsetWidth);
     setIsRunning(true);
 
-    console.log(reacts[0]);
+    //if the device has accelerometer then we can start it
+    Accelerometer.setUpdateInterval(50);
     Accelerometer.isAvailableAsync()
     .then(s => {
       Accelerometer.addListener(accelerometerData => {
@@ -61,6 +69,9 @@ export const GameScreen = ({ navigation, route }) => {
     .catch(error => {
       console.log(error);
     })
+
+
+    setInterval(startSpawning, SPAWN_INTERVAL);
   }
 
 
