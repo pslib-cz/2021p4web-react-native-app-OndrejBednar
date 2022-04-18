@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 export const GameScreen = ({ navigation, route }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [speed, setSpeed] = useState(SPEED);
-  const [reacts, setReacts] = useState([<ReactObject x="200" y="0"/>]);
+  const [reacts, setReacts] = useState([<ReactObject x={0} y={0}/>]);
   const [score, setScore] = useState(0);
   const fieldRef = useRef(null);
   const [accelerometerData, setAccelerometerData] = useState({
@@ -51,6 +51,7 @@ export const GameScreen = ({ navigation, route }) => {
     console.log(fieldRef.current.offsetHeight);
     setIsRunning(true);
 
+    console.log(reacts[0]);
     Accelerometer.isAvailableAsync()
     .then(s => {
       Accelerometer.addListener(accelerometerData => {
@@ -60,8 +61,8 @@ export const GameScreen = ({ navigation, route }) => {
     .catch(error => {
       console.log(error);
     })
-    
   }
+
 
   if (!isRunning) {
     return (
@@ -78,7 +79,9 @@ export const GameScreen = ({ navigation, route }) => {
       <View style={styles.main}>
         <Text>{score}</Text>
         <View style={styles.gameArea} ref={fieldRef}>
-          <ReactObject x="300" y="50"/>
+          {reacts.map((reactObject, index) => {
+            return <ReactObject key={index} x={reactObject.props.x} y={reactObject.props.y} index={index}/>
+          })}
         </View>
       </View>
     )

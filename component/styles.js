@@ -14,7 +14,4 @@ export default StyleSheet.create({
       position: "relative",
       overflow: "hidden"
     },
-    ReactObject: {
-      position: "absolute",
-    },
   })
