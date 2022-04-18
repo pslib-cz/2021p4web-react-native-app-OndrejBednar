@@ -1,20 +1,19 @@
 const icon = require("../assets/ReactIcon.png");
-import { Animated, Image, Button } from 'react-native';
+import { Animated, Dimensions } from 'react-native';
 import { useRef, useEffect } from 'react';
-import { View } from 'react-native-web';
+
+const windowHeight = Dimensions.get('window').height;
 
 export const ReactObject = ({ x, y }) => {
     const position = useRef(new Animated.ValueXY({ x: x, y: y })).current;
-
     const reactStyle = {
         height: `${20}px`,
         width: `${20}px`,
         position: "absolute",
     };
-
     useEffect(() => {
         Animated.timing(position, {
-            toValue: { x: position.x, y: 500 },
+            toValue: { x: position.x, y: windowHeight - 60 },
             duration: 5000,
             useNativeDriver: false
         }).start();

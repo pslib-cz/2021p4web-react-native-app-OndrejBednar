@@ -13,7 +13,7 @@ const windowHeight = Dimensions.get('window').height;
 export const GameScreen = ({ navigation, route }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [speed, setSpeed] = useState(SPEED);
-  const [reacts, setReacts] = useState([<ReactObject x={0} y={0}/>]);
+  const [reacts, setReacts] = useState([<ReactObject x={windowWidth/2} y={0}/>]);
   const [score, setScore] = useState(0);
   const fieldRef = useRef(null);
   const [accelerometerData, setAccelerometerData] = useState({
@@ -22,15 +22,16 @@ export const GameScreen = ({ navigation, route }) => {
     z: 0,
   });
 
+
   console.log("height:" + windowHeight);
   console.log("width:" + windowWidth);
   const { x, y, z } = accelerometerData;
 
 
-
-const startSpawning = () => {
-  setReacts((oldReacts) => [...oldReacts, CreateReactObject()]);
-}
+  //method for handling spawning of game objects
+  const startSpawning = () => {
+    setReacts((oldReacts) => [...oldReacts, CreateReactObject()]);
+  }
 
   //method for handling catching game objects
   const onReactCatch = (index) => {
@@ -41,8 +42,8 @@ const startSpawning = () => {
 
   //method for creating new game objects
   const CreateReactObject = () => {
-    let x = Math.floor(Math.random() * fieldRef.current.offsetWidth);
-    return <ReactObject x={x} y={0} />
+    let x = Math.floor(Math.random() * fieldRef.current.offsetWidth - 20);
+    return <ReactObject x={x} y={0}/>
   }
 
   //method for removing objects when we dont need them
@@ -61,14 +62,14 @@ const startSpawning = () => {
     //if the device has accelerometer then we can start it
     Accelerometer.setUpdateInterval(50);
     Accelerometer.isAvailableAsync()
-    .then(s => {
-      Accelerometer.addListener(accelerometerData => {
-        setAccelerometerData(accelerometerData);
+      .then(s => {
+        Accelerometer.addListener(accelerometerData => {
+          setAccelerometerData(accelerometerData);
+        })
       })
-    })
-    .catch(error => {
-      console.log(error);
-    })
+      .catch(error => {
+        console.log(error);
+      })
 
 
     setInterval(startSpawning, SPAWN_INTERVAL);
@@ -91,7 +92,7 @@ const startSpawning = () => {
         <Text>{score}</Text>
         <View style={styles.gameArea} ref={fieldRef}>
           {reacts.map((reactObject, index) => {
-            return <ReactObject key={index} x={reactObject.props.x} y={reactObject.props.y} index={index}/>
+            return <ReactObject key={index} x={reactObject.props.x} y={reactObject.props.y} index={index} />
           })}
         </View>
       </View>
